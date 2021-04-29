@@ -16,13 +16,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <Button
-            android:id="@+id/startNewGame"
+        <TextView
+            android:id="@+id/currentDifficulty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:text="Start New Game"/>
+            android:gravity="center"
+            android:paddingTop="10sp"
+            android:paddingBottom="20sp"
+            android:text="@string/currentdifficultytext"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/currentScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="20sp"
+            android:text="@string/currentscoretext"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/replayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#39715B"
+            android:paddingStart="30sp"
+            android:paddingTop="13sp"
+            android:paddingEnd="30sp"
+            android:paddingBottom="13sp"
+            android:text="@string/playAgainButton"
+            android:textColor="#FFFFFF" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -32,16 +56,25 @@
             android:layout_margin="10dp">
 
             <TextView
+                android:id="@+id/scoreName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="Player Name"/>
+                android:text="@string/scoreHeader" />
 
             <TextView
+                android:id="@+id/difficultyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/difficultyHeader"/>
+
+            <TextView
+                android:id="@+id/dateName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="Player Score"/>
+                android:text="@string/dateText"/>
         </RelativeLayout>
 
 
@@ -56,3 +89,93 @@
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ECC4C4"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="edu.umsl.tyler.details.GameStatisticsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="20sp">
+
+        <TextView
+            android:id="@+id/currentDifficulty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
+            android:text="@string/currentdifficultytext"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/currentScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="5sp"
+            android:text="@string/currentscoretext"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/replayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#39715B"
+            android:paddingStart="30sp"
+            android:paddingTop="13sp"
+            android:paddingEnd="30sp"
+            android:paddingBottom="13sp"
+            android:text="@string/playAgainButton"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#BCB5C8"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/difficultyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_constraintStart_toEndOf="parent"
+            android:layout_constraintEnd_toEndOf="@id/scoreName"
+            android:text="Difficulty" />
+
+        <TextView
+            android:id="@+id/scoreName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_constraintEnd_toStartOf="@id/difficultyName"
+            android:layout_constraintStart_toEndOf="@id/dateName"
+            android:text="Score" />
+
+        <TextView
+            android:id="@+id/dateName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_constraintEnd_toStartOf="@id/scoreName"
+            android:layout_constraintStart_toEndOf="parent"
+            android:text="Player Score" />
+    </RelativeLayout>
+
+    <fragment
+        android:id="@+id/dashFragmentContainer"
+        class="edu.umsl.tyler.details.GameStatisticsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_game_statistics"></fragment>
+</LinearLayout>-->

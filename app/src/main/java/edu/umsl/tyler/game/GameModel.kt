@@ -1,20 +1,21 @@
 package edu.umsl.tyler.game
 
 import androidx.lifecycle.ViewModel
+import java.util.*
 
 class GameModel: ViewModel() {
-    lateinit var player: Players
+    lateinit var game: Game
         private set
 
-    fun addNewPlayer(name: String, level: Int) {
-        player = Players(name, level, 0)
+    fun addNewGame(difficulty: String, score: Int) {
+        game = Game(difficulty, score, Date())
     }
 
-    fun getPlayerInfo(): Players? {
-        return player
+    fun getGameInfo(): Game? {
+        return game
     }
 
-    fun setPlayerScore(score: Int) {
-        player.score = score
+    fun setGameScore(score: Int) {
+        game.score = score
     }
 }

@@ -4,15 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import edu.umsl.tyler.game.GameModel
 import edu.umsl.tyler.game.PlayGameActivity
+import edu.umsl.tyler.persistence.GameRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var gameModel: GameModel
-    private lateinit var receivedName: String
-    private val easy = 1
-    private val normal = 2
-    private val hard = 3
+    private lateinit var difficultyString: String
+    private lateinit var repository: GameRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,27 +21,29 @@ class MainActivity : AppCompatActivity() {
         ModelHolder.instance.set(gameModel)
 
         easyBtn?.setOnClickListener {
-            receivedName = "baby"
-            gameModel.addNewPlayer(receivedName, easy)
-            ModelHolder.instance.set(gameModel)
-            val intent = PlayGameActivity.newIntent(this, receivedName, easy)
-            startActivity(intent)
+            difficultyString = "Easy"
+            setCurrentDifficulty(difficultyString)
         }
 
         normalBtn?.setOnClickListener {
-            receivedName = "person"
-            gameModel.addNewPlayer(receivedName, normal)
-            ModelHolder.instance.set(gameModel)
-            val intent = PlayGameActivity.newIntent(this, receivedName, normal)
-            startActivity(intent)
+            difficultyString = "Normal"
+            setCurrentDifficulty(difficultyString)
         }
 
         hardBtn?.setOnClickListener {
-            receivedName = "god"
-            gameModel.addNewPlayer(receivedName, hard)
-            ModelHolder.instance.set(gameModel)
-            val intent = PlayGameActivity.newIntent(this, receivedName, hard)
-            startActivity(intent)
+            difficultyString = "Hard"
+            setCurrentDifficulty(difficultyString)
         }
+    }
+
+    private fun setCurrentDifficulty(difficultyString: String) {
+        if (!this::repository.isInitialized) {
+            repository = GameRepository(this.applicationContext)
+        }
+
+        gameModel.addNewGame(difficultyString, 0)
+        ModelHolder.instance.set(gameModel)
+        val intent = PlayGameActivity.newIntent(this, difficultyString, 0)
+        startActivity(intent)
     }
 }

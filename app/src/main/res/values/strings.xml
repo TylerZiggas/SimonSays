@@ -13,4 +13,12 @@
     <string name="SimonTitle">The Simon Game</string>
     <string name="timerText">"Timer: "</string>
     <string name="scoreText">Score: 0</string>
+    <string name="dateText">Date</string>
+    <string name="difficultyText">Difficulty</string>
+    <string name="currentdifficultytext">DifficultyText</string>
+    <string name="currentscoretext">ScoreText</string>
+    <string name="playAgainButton">Play Again</string>
+    <string name="difficultyHeader">Difficulty</string>
+    <string name="scoreHeader">Score</string>
+    <string name="dateHeader">Date</string>
 </resources>

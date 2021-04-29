@@ -20,7 +20,24 @@ class GameStatisticsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        startNewGame.setOnClickListener {
+        val yourDifficulty = intent.getSerializableExtra("difficulty")
+        val yourScore = intent.getSerializableExtra("score")
+
+        val difficultyLevel = when (yourDifficulty) {
+            1 -> {
+                "Easy"
+            }
+            2 -> {
+                "Normal"
+            }
+            else -> {
+                "Hard"
+            }
+        }
+        currentDifficulty.text = "Difficulty: " + difficultyLevel
+        currentScore.text = "Score: " + yourScore.toString()
+
+        replayButton.setOnClickListener {
             finish()
         }
         val gameStatsFragment = GameStatisticsFragment()

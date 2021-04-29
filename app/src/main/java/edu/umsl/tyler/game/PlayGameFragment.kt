@@ -18,22 +18,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import edu.umsl.tyler.ModelHolder
 import edu.umsl.tyler.R
-import edu.umsl.tyler.persistence.SimonDB
+import edu.umsl.tyler.persistence.GameDatabase
 import edu.umsl.tyler.details.GameStatisticsActivity
-import edu.umsl.tyler.persistence.PlayerEntity
+import edu.umsl.tyler.persistence.GameEntity
+import edu.umsl.tyler.persistence.GameRepository
 import kotlinx.android.synthetic.main.fragment_play_game.*
 import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class PlayGameFragment: Fragment() {
 
     private lateinit var gamerModel: GameModel
     private lateinit var viewModel: FlashSequenceModel
+    private lateinit var repository: GameRepository
     private val buttonColors = ArrayList<Button>()
     var totalDuration = 0
-    private lateinit var playerName: String
     private var difficultyLevel: Int = 0
     private var currentScore: Int = 0
 
@@ -70,11 +69,19 @@ class PlayGameFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         gamerModel = ModelHolder.instance.get(GameModel::class)!!
-        playerName = gamerModel.getPlayerInfo()!!.name
-        difficultyLevel = gamerModel.getPlayerInfo()!!.level
+        difficultyLevel = when (gamerModel.getGameInfo()!!.difficulty) {
+            "Easy" -> {
+                1
+            }
+            "Normal" -> {
+                2
+            }
+            else -> {
+                3
+            }
+        }
         viewModel = ViewModelProvider(this).get(FlashSequenceModel::class.java)
-        val view = inflater.inflate(R.layout.fragment_play_game, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_play_game, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -115,6 +122,8 @@ class PlayGameFragment: Fragment() {
             R.id.scoreBoard -> {
                 viewModel.clearSeq()
                 val intent = GameStatisticsActivity.newIntent(activity)
+                intent.putExtra("difficulty" ,difficultyLevel)
+                intent.putExtra("score" ,currentScore)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 activity?.finish()
@@ -147,8 +156,8 @@ class PlayGameFragment: Fragment() {
         if (validateSeq) {
             if (viewModel.getPlayerSeq().size === viewModel.getSeq().size) {
                 currentScore++
-                gamerModel.setPlayerScore(currentScore)
-                scoreText.text = "Score: " + gamerModel.getPlayerInfo()?.score
+                gamerModel.setGameScore(currentScore)
+                scoreText.text = "Score: " + gamerModel.getGameInfo()?.score
 
 
                 difficultyTimerEnd()
@@ -197,10 +206,16 @@ class PlayGameFragment: Fragment() {
         scoreBoard?.visibility = View.VISIBLE
         gameOverText?.visibility = View.VISIBLE
 
+        if (!this::repository.isInitialized) {
+            repository = activity?.let { GameRepository(it) }!!
+        }
+
         runBlocking {
-            val playerData = PlayerEntity(gamerModel.getPlayerInfo()?.name!!, gamerModel.getPlayerInfo()?.score!!)
+            val gameData = (gamerModel.getGameInfo())
             context?.let {
-                SimonDB(it).getPlayerDataDao().addPlayer(playerData)
+                if (gameData != null) {
+                    repository.saveScore(gameData)
+                }
             }
         }
     }

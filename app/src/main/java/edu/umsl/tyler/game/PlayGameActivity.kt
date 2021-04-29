@@ -5,17 +5,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import edu.umsl.tyler.R
+import edu.umsl.tyler.persistence.GameRepository
 
 class PlayGameActivity : AppCompatActivity() {
 
+    private lateinit var repository: GameRepository
+
     companion object {
-        private const val PASSING_PLAYER_NAME = "edu.umsl.tyler.PLAYER_NAME"
-        private const val PASSING_GAME_LEVEL = "edu.umsl.tyler.LEVEL"
         @JvmStatic
-        fun newIntent(context: FragmentActivity?, name: String, lvl: Int): Intent {
+        fun newIntent(context: FragmentActivity?, difficulty: String, score: Int): Intent {
             val intent = Intent(context, PlayGameActivity::class.java)
-            intent.putExtra(PASSING_PLAYER_NAME, name)
-            intent.putExtra(PASSING_GAME_LEVEL, lvl)
+            intent.putExtra("difficulty", difficulty)
+            intent.putExtra("score", score)
             return intent
         }
     }
@@ -23,6 +24,10 @@ class PlayGameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        if (!this::repository.isInitialized) {
+            repository = GameRepository(this.applicationContext)
+        }
 
         val playGameFragment = PlayGameFragment()
 

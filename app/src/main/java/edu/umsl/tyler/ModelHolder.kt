@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 class ModelHolder private constructor() {
 
-    private val modelPlayers = HashMap<String, WeakReference<Any?>>()
+    private val modelGames = HashMap<String, WeakReference<Any?>>()
 
     companion object{
         @JvmStatic
@@ -14,11 +14,11 @@ class ModelHolder private constructor() {
 
     @Suppress("UNCHECKED_CAST")
     fun <T: Any> get(classType: KClass<T>): T? {
-        val modelPlayer = modelPlayers[classType.java.toString()]
+        val modelPlayer = modelGames[classType.java.toString()]
         return modelPlayer?.get() as? T
     }
 
     fun <T: Any> set(classInstance: T?) {
-        modelPlayers[classInstance?.javaClass.toString()] = WeakReference(classInstance as? Any)
+        modelGames[classInstance?.javaClass.toString()] = WeakReference(classInstance as? Any)
     }
 }
