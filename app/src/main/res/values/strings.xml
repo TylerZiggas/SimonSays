@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Simon Says App</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="startButton">Start</string>
+    <string name="game_name">Simon Says</string>
+    <string name="hardButton">Hard</string>
+    <string name="normalButton">Normal</string>
+    <string name="easyButton">Easy</string>
+    <string name="selectText">Please Select a Difficulty</string>
+    <string name="creatorName">by Tyler Ziggas</string>
+    <string name="SimonTitle">The Simon Game</string>
+    <string name="timerText">"Timer: "</string>
+    <string name="scoreText">Score: 0</string>
+</resources>
