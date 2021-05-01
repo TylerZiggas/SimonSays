@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// Our custom view model holder
+
 package edu.umsl.tyler
 
 import java.lang.ref.WeakReference

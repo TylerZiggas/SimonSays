@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// Our database
+
 package edu.umsl.tyler.persistence
 
 import androidx.room.Database

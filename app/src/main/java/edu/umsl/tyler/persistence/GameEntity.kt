@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// The game entities used in our database
+
 package edu.umsl.tyler.persistence
 
 import androidx.room.ColumnInfo

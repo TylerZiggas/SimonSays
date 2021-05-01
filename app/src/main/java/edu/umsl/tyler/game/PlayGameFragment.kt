@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// This is the fragment where the game is played
+
 package edu.umsl.tyler.game
 
 import android.animation.*
@@ -35,10 +39,10 @@ class PlayGameFragment: Fragment() {
     private var position: Int = 0
 
 
-    private val easyTimer = object: CountDownTimer(3000, 1000) {
+    private val easyTimer = object: CountDownTimer(3000, 1000) { // Timer for easy mode
         @RequiresApi(Build.VERSION_CODES.N)
-        override fun onFinish() {
-            flashButton( viewModel.getSeq()[position], false)
+        override fun onFinish() { // We want to flash correct button and end
+            flashButton(viewModel.getSeq()[position], false)
             gameOver()
         }
 
@@ -48,10 +52,10 @@ class PlayGameFragment: Fragment() {
         }
     }
 
-    private val normalTimer = object: CountDownTimer(2000, 1000) {
+    private val normalTimer = object: CountDownTimer(2000, 1000) { // Timer for normal mode
         @RequiresApi(Build.VERSION_CODES.N)
-        override fun onFinish() {
-            flashButton( viewModel.getSeq()[position], false)
+        override fun onFinish() { // We want to flash correct button and end
+            flashButton(viewModel.getSeq()[position], false)
             gameOver()
         }
 
@@ -61,10 +65,10 @@ class PlayGameFragment: Fragment() {
         }
     }
 
-    private val hardTimer = object: CountDownTimer(1000, 1000) {
+    private val hardTimer = object: CountDownTimer(1000, 1000) { // Timer for hard mode
         @RequiresApi(Build.VERSION_CODES.N)
-        override fun onFinish() {
-            flashButton( viewModel.getSeq()[position], false)
+        override fun onFinish() { // We want to flash correct button and end
+            flashButton(viewModel.getSeq()[position], false)
             gameOver()
         }
 
@@ -76,7 +80,7 @@ class PlayGameFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         gamerModel = ModelHolder.instance.get(GameModel::class)!!
-        difficultyLevel = when (gamerModel.getGameInfo()!!.difficulty) {
+        difficultyLevel = when (gamerModel.getGameInfo()!!.difficulty) { // Figure out which difficulty was selected
             "Easy" -> {
                 1
             }
@@ -96,21 +100,21 @@ class PlayGameFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         retainInstance
 
-        buttonColors.add(yellowBtn)
+        buttonColors.add(yellowBtn) // Add the different options of colors
         buttonColors.add(blueBtn)
         buttonColors.add(greenBtn)
         buttonColors.add(redBtn)
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) { // Create a new sequence of buttons
             initialRandomSequence(buttonColors)
         }
         viewModel.resetTracker()
 
-        controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, false)
+        controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, false) // Do not let user click buttons while we show sequence
         runUIUpdate()
-        controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, true)
+        controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, true)
 
-        yellowBtn.setOnClickListener(selectionListener)
+        yellowBtn.setOnClickListener(selectionListener) // Set our on click listeners for our buttons
         blueBtn.setOnClickListener(selectionListener)
         greenBtn.setOnClickListener(selectionListener)
         redBtn.setOnClickListener(selectionListener)
@@ -119,7 +123,7 @@ class PlayGameFragment: Fragment() {
 
     }
 
-    private fun difficultyTimerStart() {
+    private fun difficultyTimerStart() { // Starting our timer based on our difficulty
         when (difficultyLevel) {
             1 -> {
                 easyTimer.start()
@@ -133,7 +137,7 @@ class PlayGameFragment: Fragment() {
         }
     }
 
-    private fun difficultyTimerEnd() {
+    private fun difficultyTimerEnd() { // Ending our timer based on our difficulty
         when (difficultyLevel) {
             1 -> {
                 easyTimer.cancel()
@@ -148,14 +152,14 @@ class PlayGameFragment: Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private var gameOverSelection = View.OnClickListener { v ->
+    private var gameOverSelection = View.OnClickListener { v -> // Our selection of buttons after a game over
         when(v.id){
-            R.id.restartBtn -> {
+            R.id.restartBtn -> { // Restart game if they want to restart
                 restartGame()
             }
-            R.id.scoreBoard -> {
+            R.id.scoreBoard -> { // Go to scoreboard if we are finished with the game
                 viewModel.clearSeq()
-                val intent = GameStatisticsActivity.newIntent(activity)
+                val intent = GameStatisticsActivity.newIntent(activity) // Grab intent and pass this runs difficulty and score to display
                 intent.putExtra("difficulty", difficultyLevel)
                 intent.putExtra("score", currentScore)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -166,89 +170,89 @@ class PlayGameFragment: Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private var selectionListener = View.OnClickListener { v ->
+    private var selectionListener = View.OnClickListener { v -> // Listener for checking the button sequence
 
         var validateSeq = true
         when(v.id){
-            R.id.redBtn -> {
+            R.id.redBtn -> { // Check if red is correct
                 addGameNewSequence(redBtn)
                 validateSeq = checkPlayerChoice(redBtn)
             }
-            R.id.greenBtn -> {
+            R.id.greenBtn -> { // Check if green is correct
                 addGameNewSequence(greenBtn)
                 validateSeq = checkPlayerChoice(greenBtn)
             }
-            R.id.blueBtn -> {
+            R.id.blueBtn -> { // Check if blue is correct
                 addGameNewSequence(blueBtn)
                 validateSeq = checkPlayerChoice(blueBtn)
             }
-            R.id.yellowBtn -> {
+            R.id.yellowBtn -> { // Check if yellow is correct
                 addGameNewSequence(yellowBtn)
                 validateSeq = checkPlayerChoice(yellowBtn)
             }
         }
-        if (validateSeq) {
+        if (validateSeq) { // Check to see if the sequences are now the same
             if (viewModel.getGameSeq().size === viewModel.getSeq().size) {
                 currentScore++
                 gamerModel.setGameScore(currentScore)
                 val newScore = "Score: " + gamerModel.getGameInfo()?.score
                 scoreText.text = newScore
 
-
                 difficultyTimerEnd()
-                addNewRandomSequence(buttonColors)
-                controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, false)
-                runUIUpdate()
-                controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, true)
+                addNewRandomSequence(buttonColors) // Add a new button to the sequence
+                controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, false)
+                runUIUpdate() // Show the new sequence
+                controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, true)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun restartGame() {
-        restartBtn?.visibility = View.INVISIBLE
+    fun restartGame() { // Clear everything and restart our game
+        restartBtn?.visibility = View.INVISIBLE // Reset game over screen to invisible
         scoreBoard?.visibility = View.INVISIBLE
         gameOverText?.visibility = View.INVISIBLE
-        viewModel.clearSeq()
+        viewModel.clearSeq() // Clear sequences
         viewModel.clearGameSeq()
         totalDuration = 0
         currentScore = 0
         position = 0
         scoreText.text = "Score: 0"
-        initialRandomSequence(buttonColors)
-        controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, false)
+        initialRandomSequence(buttonColors) // Create our new sequence
+        controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, false)
         runUIUpdate()
-        controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, true)
+        controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, true)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun checkPlayerChoice(btn: Button): Boolean {
-            if (btn !== viewModel.getSeq()[position]) {
-                flashButton(viewModel.getSeq()[position], false)
-                gameOver()
-                controlButtonsVisibility(yellowBtn, blueBtn, greenBtn, redBtn, false)
+    private fun checkPlayerChoice(btn: Button): Boolean { // Check our choice
+            if (btn !== viewModel.getSeq()[position]) { // Compare the position in the sequence to the button we selected
+                flashButton(viewModel.getSeq()[position], false) // Flash what you should have clicked
+                gameOver()  // End game
+                controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, false)
                 difficultyTimerEnd()
                 position++
                 return false
             } else {
-                flashButton(viewModel.getSeq()[position], true)
-                difficultyTimerStart()
+                flashButton(viewModel.getSeq()[position], true) // FLash what you clicked that was correct
+                difficultyTimerStart() // Reset timer after each correct click
                 position++
             }
         return true
     }
 
     fun gameOver() {
+        controlClickability(yellowBtn, blueBtn, greenBtn, redBtn, false) // Show the game over screen and disable buttons
         scoreText?.text = "GAME OVER"
         restartBtn?.visibility = View.VISIBLE
         scoreBoard?.visibility = View.VISIBLE
         gameOverText?.visibility = View.VISIBLE
 
-        if (!this::repository.isInitialized) {
+        if (!this::repository.isInitialized) { // Initialize repository before inserting info
             repository = activity?.let { GameRepository(it) }!!
         }
 
-        runBlocking {
+        runBlocking { // Inserting our game data
             val gameData = (gamerModel.getGameInfo())
             context?.let {
                 if (gameData != null) {
@@ -258,11 +262,11 @@ class PlayGameFragment: Fragment() {
         }
     }
 
-    private fun addGameNewSequence(pressedButton: Button) {
+    private fun addGameNewSequence(pressedButton: Button) { // Call to add a new sequence to our buttons
         viewModel.addGameSeq(pressedButton)
     }
 
-    private fun initialRandomSequence(allBtnColors: ArrayList<Button>) {
+    private fun initialRandomSequence(allBtnColors: ArrayList<Button>) { // Our initial sequence changes upon our difficulty
         when (difficultyLevel) {
             1 -> {
                 val random = (0..3).random()
@@ -283,12 +287,12 @@ class PlayGameFragment: Fragment() {
         }
     }
 
-    private fun addNewRandomSequence(allBtnColors: ArrayList<Button>) {
+    private fun addNewRandomSequence(allBtnColors: ArrayList<Button>) { // Random add for the next button
         val random = (0..3).random()
         viewModel.addSeq(allBtnColors[random])
     }
 
-    private fun controlButtonsVisibility(btn1: Button, btn2: Button, btn3: Button, btn4: Button, value: Boolean) {
+    private fun controlClickability(btn1: Button, btn2: Button, btn3: Button, btn4: Button, value: Boolean) { // Changing our whether it should be clickable or not
         if (!value) {
             btn1.isEnabled = value
             btn2.isEnabled = value
@@ -297,7 +301,7 @@ class PlayGameFragment: Fragment() {
         }
         else {
             val handler = Handler()
-            val runnable = Runnable {
+            val runnable = Runnable { // Setting our runnable for clicking the correct sequence
                 btn1.isEnabled = value
                 btn2.isEnabled = value
                 btn3.isEnabled = value
@@ -310,10 +314,10 @@ class PlayGameFragment: Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun flashButton(btn: Button, validation: Boolean) {
+    fun flashButton(btn: Button, validation: Boolean) { // Function for flashing a single button
         activity?.let {activity ->
             val originalColor = btn.background as? ColorDrawable
-            val redColor = if (validation) {
+            val redColor = if (validation) { // If we are correct flash it green, wrong or time is out flash red
                 ContextCompat.getColor(activity, R.color.rightAccent)
             } else {
                 ContextCompat.getColor(activity, R.color.wrongAccent)
@@ -330,14 +334,14 @@ class PlayGameFragment: Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun runUIUpdate() {
+    fun runUIUpdate() { // Show the entire sequence
         position = 0
         var index = 0
         activity?.let {activity ->
-            viewModel.clearGameSeq()
+            viewModel.clearGameSeq() // Clear our old sequence that was shown
             for (btn in viewModel.sequenceTracker) {
                 val originalColor = btn.background as? ColorDrawable
-                val redColor = ContextCompat.getColor(activity, R.color.colorAccent)
+                val redColor = ContextCompat.getColor(activity, R.color.colorAccent) // Set up colors
                 val animator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor?.color, redColor, originalColor?.color)
 
                 animator.addUpdateListener { valueAnimator ->
@@ -345,12 +349,12 @@ class PlayGameFragment: Fragment() {
                     }
                 }
 
-                animator?.startDelay = ((index+1) * (2000/difficultyLevel)).toLong()
-                animator?.duration = 2000.toLong()/difficultyLevel
+                animator?.startDelay = ((index+1) * (2000/3)).toLong() // Set up how long the animation plays
+                animator?.duration = 2000.toLong()/3
                 totalDuration = animator.totalDuration.toInt()
                 animator?.start()
 
-                animator.addListener(object : AnimatorListenerAdapter() {
+                animator.addListener(object : AnimatorListenerAdapter() { // Animate said button
                     override fun onAnimationEnd(animation: Animator) {
                         viewModel.popButton()
                     }
@@ -360,9 +364,13 @@ class PlayGameFragment: Fragment() {
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroy() { // On destroy cancel timers in case of problem and clear view model
         super.onDestroy()
+        easyTimer.cancel()
+        normalTimer.cancel()
+        hardTimer.cancel()
         viewModel.clearGameSeq()
+        viewModel.resetTracker()
     }
 
 }

@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// For database inserting and grabbing
+
 package edu.umsl.tyler.persistence
 
 import androidx.room.Dao

@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// Fragment to display our scoreboard
+
 package edu.umsl.tyler.details
 
 import android.os.Bundle
@@ -32,11 +36,11 @@ class GameStatisticsFragment : Fragment() {
 
         dashboardResult.adapter = PlayersAdapter()
 
-        if (!this::repository.isInitialized) {
+        if (!this::repository.isInitialized) { // Initialize repository
             repository = activity?.let { GameRepository(it) }!!
         }
 
-        runBlocking {
+        runBlocking {// Grab our scores from the database
             context?.let {
                 games = repository.fetchScores()
 
@@ -45,21 +49,21 @@ class GameStatisticsFragment : Fragment() {
     }
 
     inner class PlayersAdapter: RecyclerView.Adapter<PlayerHolder>(){
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerHolder { // Our viewholder
             val inflater = LayoutInflater.from(activity)
             val itemView = inflater.inflate(R.layout.fragment_game_statistics, parent, false)
 
             return PlayerHolder(itemView)
         }
 
-        override fun onBindViewHolder(holder: PlayerHolder, position: Int) {
+        override fun onBindViewHolder(holder: PlayerHolder, position: Int) { // Bind it based on our 3 parameters we show in the scoreboard
             holder.itemView.scoreBoxID.text = games[position].difficulty
             holder.itemView.difficultyBoxID.text = games[position].score.toString()
             holder.itemView.DateBoxID.text = games[position].date.toString()
         }
 
-        override fun getItemCount(): Int = games.size
+        override fun getItemCount(): Int = games.size // Getting our item count
     }
 
-    inner class PlayerHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView)
+    inner class PlayerHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView) // Our holder constructor
 }

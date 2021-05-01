@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// Our repository for calls
+
 package edu.umsl.tyler.persistence
 
 import android.app.Activity
@@ -14,21 +18,21 @@ class GameRepository(private var ctx: Context) {
 
     private val db: GameDatabase
 
-    init {
+    init { // Initializing our database
         if (ctx is Activity) {
             ctx = ctx.applicationContext
         }
         db = Room.databaseBuilder(ctx, GameDatabase::class.java, "Scoreboard.sqlite").build()
     }
 
-    fun saveScore(game: Game) {
+    fun saveScore(game: Game) { // If we are to save a score, take in a game data type
         val entity = GameEntity(game.difficulty, game.score, game.date ?: Date())
         CoroutineScope(Dispatchers.Default).launch {
             db.gameDao().insertScore(entity)
         }
     }
 
-    fun fetchScores(): List<Game> {
+    fun fetchScores(): List<Game> { // Getting our entire scoreboard
         val result = runBlocking {
             return@runBlocking db.gameDao().fetchScoreboard()
         }

@@ -1,3 +1,7 @@
+// Author: Tyler Ziggas
+// Date: May 2021
+// Used for converting our Date data type
+
 package edu.umsl.tyler.persistence
 
 import androidx.room.TypeConverter
