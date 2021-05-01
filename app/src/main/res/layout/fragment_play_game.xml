@@ -54,6 +54,7 @@
 
             <Button
                 android:id="@+id/greenBtn"
+                android:src="@drawable/green_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -63,6 +64,7 @@
 
             <Button
                 android:id="@+id/yellowBtn"
+                android:src="@drawable/yellow_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -80,6 +82,7 @@
 
             <Button
                 android:id="@+id/blueBtn"
+                android:src="@drawable/blue_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -89,6 +92,7 @@
 
             <Button
                 android:id="@+id/redBtn"
+                android:src="@drawable/red_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

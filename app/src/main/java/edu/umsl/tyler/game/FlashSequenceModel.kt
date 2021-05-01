@@ -8,7 +8,7 @@ class FlashSequenceModel: ViewModel() {
     var sequence: ArrayList<Button> = ArrayList()
         private set
 
-    var playerSequence: ArrayList<Button> = ArrayList()
+    var gameSequence: ArrayList<Button> = ArrayList()
         private set
 
     var sequenceTracker: ArrayList<Button> = ArrayList()
@@ -19,16 +19,16 @@ class FlashSequenceModel: ViewModel() {
         resetTracker()
     }
 
-    fun addPlayerSeq(btn: Button) {
-        playerSequence.add(btn)
+    fun addGameSeq(btn: Button) {
+        gameSequence.add(btn)
     }
 
     fun getSeq(): ArrayList<Button> {
         return sequence
     }
 
-    fun getPlayerSeq(): ArrayList<Button> {
-        return playerSequence
+    fun getGameSeq(): ArrayList<Button> {
+        return gameSequence
     }
 
     fun popButton() {
@@ -41,8 +41,8 @@ class FlashSequenceModel: ViewModel() {
         sequence.clear()
     }
 
-    fun clearPlayerSeq() {
-        playerSequence.clear()
+    fun clearGameSeq() {
+        gameSequence.clear()
     }
 
     fun resetTracker() {

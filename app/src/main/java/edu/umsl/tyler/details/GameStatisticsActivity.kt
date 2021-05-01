@@ -34,8 +34,11 @@ class GameStatisticsActivity : AppCompatActivity() {
                 "Hard"
             }
         }
-        currentDifficulty.text = "Difficulty: " + difficultyLevel
-        currentScore.text = "Score: " + yourScore.toString()
+
+        val difficultyText = "Difficulty: $difficultyLevel"
+        val scoreText = "Score: " + yourScore.toString()
+        currentDifficulty.text = difficultyText
+        currentScore.text = scoreText
 
         replayButton.setOnClickListener {
             finish()

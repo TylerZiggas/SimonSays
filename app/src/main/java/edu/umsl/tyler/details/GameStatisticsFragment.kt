@@ -9,12 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.umsl.tyler.R
 import edu.umsl.tyler.game.Game
-import edu.umsl.tyler.persistence.GameDatabase
-import edu.umsl.tyler.persistence.GameEntity
 import edu.umsl.tyler.persistence.GameRepository
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_game_statistics.view.*
-import kotlinx.android.synthetic.main.fragment_play_game.view.*
 import kotlinx.coroutines.runBlocking
 
 class GameStatisticsFragment : Fragment() {
