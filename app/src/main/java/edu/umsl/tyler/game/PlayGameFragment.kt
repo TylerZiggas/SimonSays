@@ -37,13 +37,17 @@ class PlayGameFragment: Fragment() {
     private var difficultyLevel: Int = 0
     private var currentScore: Int = 0
     private var position: Int = 0
+    private var gameRunning: Boolean = true
+    private lateinit var animator: Animator
 
 
     private val easyTimer = object: CountDownTimer(3000, 1000) { // Timer for easy mode
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onFinish() { // We want to flash correct button and end
-            flashButton(viewModel.getSeq()[position], false)
-            gameOver()
+            if (gameRunning) {
+                flashButton(viewModel.getSeq()[position], false)
+                gameOver()
+            }
         }
 
         override fun onTick(millisUntilFinished: Long) {
@@ -55,8 +59,10 @@ class PlayGameFragment: Fragment() {
     private val normalTimer = object: CountDownTimer(2000, 1000) { // Timer for normal mode
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onFinish() { // We want to flash correct button and end
-            flashButton(viewModel.getSeq()[position], false)
-            gameOver()
+            if (gameRunning) {
+                flashButton(viewModel.getSeq()[position], false)
+                gameOver()
+            }
         }
 
         override fun onTick(millisUntilFinished: Long) {
@@ -68,8 +74,10 @@ class PlayGameFragment: Fragment() {
     private val hardTimer = object: CountDownTimer(1000, 1000) { // Timer for hard mode
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onFinish() { // We want to flash correct button and end
-            flashButton(viewModel.getSeq()[position], false)
-            gameOver()
+            if (gameRunning) {
+                flashButton(viewModel.getSeq()[position], false)
+                gameOver()
+            }
         }
 
         override fun onTick(millisUntilFinished: Long) {
@@ -316,20 +324,20 @@ class PlayGameFragment: Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     fun flashButton(btn: Button, validation: Boolean) { // Function for flashing a single button
         activity?.let {activity ->
-            val originalColor = btn.background as? ColorDrawable
-            val redColor = if (validation) { // If we are correct flash it green, wrong or time is out flash red
+            val originalColor = btn.currentTextColor
+            val newColor = if (validation) { // If we are correct flash it green, wrong or time is out flash red
                 ContextCompat.getColor(activity, R.color.rightAccent)
             } else {
                 ContextCompat.getColor(activity, R.color.wrongAccent)
             }
-            val animator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor?.color, redColor, originalColor?.color)
+            animator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor, newColor, originalColor)
 
-            animator.addUpdateListener { valueAnimator ->
-                (valueAnimator.animatedValue as? Int)?.let { animatedValue -> btn.setBackgroundColor(animatedValue)
+            (animator as ValueAnimator?)?.addUpdateListener { valueAnimator ->
+                (valueAnimator.animatedValue as? Int)?.let { animatedValue -> btn.background.setTint(animatedValue)
                 }
             }
 
-            animator?.start()
+            animator.start()
         }
     }
 
@@ -340,19 +348,19 @@ class PlayGameFragment: Fragment() {
         activity?.let {activity ->
             viewModel.clearGameSeq() // Clear our old sequence that was shown
             for (btn in viewModel.sequenceTracker) {
-                val originalColor = btn.background as? ColorDrawable
-                val redColor = ContextCompat.getColor(activity, R.color.colorAccent) // Set up colors
-                val animator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor?.color, redColor, originalColor?.color)
+                val originalColor = btn.currentTextColor
+                val newColor = ContextCompat.getColor(activity, R.color.colorAccent) // Set up colors
+                animator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor, newColor, originalColor)
 
-                animator.addUpdateListener { valueAnimator ->
-                    (valueAnimator.animatedValue as? Int)?.let { animatedValue -> btn.setBackgroundColor(animatedValue)
+                (animator as ValueAnimator?)?.addUpdateListener { valueAnimator ->
+                    (valueAnimator.animatedValue as? Int)?.let { animatedValue -> btn.background.setTint(animatedValue)
                     }
                 }
 
-                animator?.startDelay = ((index+1) * (2000/3)).toLong() // Set up how long the animation plays
-                animator?.duration = 2000.toLong()/3
+                animator.startDelay = ((index+1) * (2000/3)).toLong() // Set up how long the animation plays
+                animator.duration = 2000.toLong()/3
                 totalDuration = animator.totalDuration.toInt()
-                animator?.start()
+                animator.start()
 
                 animator.addListener(object : AnimatorListenerAdapter() { // Animate said button
                     override fun onAnimationEnd(animation: Animator) {
@@ -366,11 +374,14 @@ class PlayGameFragment: Fragment() {
 
     override fun onDestroy() { // On destroy cancel timers in case of problem and clear view model
         super.onDestroy()
+        gameRunning = false
+        animator.cancel()
         easyTimer.cancel()
         normalTimer.cancel()
         hardTimer.cancel()
         viewModel.clearGameSeq()
         viewModel.resetTracker()
+        activity?.finish()
     }
 
 }

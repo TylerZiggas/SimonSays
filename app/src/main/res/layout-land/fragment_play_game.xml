@@ -7,35 +7,38 @@
     android:layout_height="match_parent"
     android:background="#ECC4C4">
 
+
     <TextView
         android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:paddingBottom="20dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp"
+        android:paddingTop="10dp"
         android:text="@string/scoreText"
         android:textColor="#111217"
         android:textSize="40sp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.050"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/timerText"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
+        android:layout_width="171dp"
+        android:layout_height="37dp"
         android:layout_below="@id/restartBtn"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:paddingTop="10dp"
         android:text="@string/timerText"
-        android:paddingBottom="20dp"
         android:textAlignment="center"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.050"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scoreText" />
-
 
     <LinearLayout
         android:id="@+id/allColors"
@@ -45,13 +48,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerText">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.870">
 
         <LinearLayout
             android:id="@+id/colorsLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_below="@id/scoreText"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -59,8 +62,8 @@
                 android:id="@+id/greenBtn"
                 android:layout_width="30dp"
                 android:layout_height="200dp"
-                android:layout_weight="1"
                 android:layout_gravity="bottom"
+                android:layout_weight="1"
                 android:background="@drawable/custom_green_button"
                 android:backgroundTint="#00FF00"
                 android:textColor="#00FF00"
@@ -69,9 +72,9 @@
             <Button
                 android:id="@+id/yellowBtn"
                 android:layout_width="30dp"
-                android:layout_height="200dp"
-                android:layout_weight="1"
+                android:layout_height="201dp"
                 android:layout_gravity="bottom"
+                android:layout_weight="1"
                 android:background="@drawable/custom_yellow_button"
                 android:backgroundTint="#FFFF00"
                 android:textColor="#FFFF00"
@@ -82,7 +85,6 @@
             android:id="@+id/colorsLayout2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_below="@id/scoreText"
             android:layout_weight="1">
 
             <Button
@@ -116,7 +118,7 @@
         android:layout_height="40dp"
         android:layout_below="@id/allColors"
         android:background="#6C0A7E"
-        android:text="Restart"
+        android:text="@string/restart"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:visibility="invisible"
@@ -135,7 +137,7 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/restartBtn"
         android:background="#6C0A7E"
-        android:text="Finish"
+        android:text="@string/finish"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:visibility="invisible"
@@ -150,7 +152,7 @@
         android:id="@+id/gameOverText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GAME OVER"
+        android:text="@string/game_over"
         android:textColor="#BD2A2A"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
